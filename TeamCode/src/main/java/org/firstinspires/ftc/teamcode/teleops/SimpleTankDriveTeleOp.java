@@ -14,6 +14,7 @@ public class SimpleTankDriveTeleOp extends OpMode {
     private static final String LEFT_REAR_DRIVE_NAME = "leftRearDrive";
     private static final String RIGHT_FRONT_DRIVE_NAME = "rightFrontDrive";
     private static final String RIGHT_REAR_DRIVE_NAME = "rightRearDrive";
+    private static final String FIFTH_MOTOR_NAME = "fifth_motor"; // <<< CHANGE THIS TO YOUR ACTUAL MOTOR NAME
 
     @Override
     public void init() {
@@ -22,7 +23,8 @@ public class SimpleTankDriveTeleOp extends OpMode {
                 LEFT_FRONT_DRIVE_NAME,
                 LEFT_REAR_DRIVE_NAME,
                 RIGHT_FRONT_DRIVE_NAME,
-                RIGHT_REAR_DRIVE_NAME
+                RIGHT_REAR_DRIVE_NAME,
+                FIFTH_MOTOR_NAME
         );
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -33,17 +35,20 @@ public class SimpleTankDriveTeleOp extends OpMode {
         // Tank drive controls:
         // Left joystick Y controls left motors
         // Right joystick Y controls right motors
-        // We negate the joystick values because forward on the joystick (pushing up)
-        // typically gives a negative value, and we want positive power for forward movement.
         double leftPower = gamepad1.left_stick_y;
         double rightPower = gamepad1.right_stick_y;
 
         driveTrain.setPower(leftPower, rightPower);
 
+        // Control the fifth motor using L1 and R1 bumpers on gamepad1
+        driveTrain.controlFifthMotor(gamepad1.left_bumper, gamepad1.right_bumper);
+
         telemetry.addData("Left Power", "%.2f", leftPower);
         telemetry.addData("Right Power", "%.2f", rightPower);
         telemetry.addData("Left Stick Y", "%.2f", gamepad1.left_stick_y);
         telemetry.addData("Right Stick Y", "%.2f", gamepad1.right_stick_y);
+        telemetry.addData("L1 Pressed", gamepad1.left_bumper);
+        telemetry.addData("R1 Pressed", gamepad1.right_bumper);
         telemetry.update();
     }
 
